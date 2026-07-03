@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Education Hub</title>
+    <style>
+        :root {
+            --bg: #f5f7ff;
+            --surface: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary: #4f46e5;
+            --secondary: #ec4899;
+            --border: #e5e7eb;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: radial-gradient(circle at top, #eef2ff 0%, #f8fafc 45%, #f5f7ff 100%);
+            color: var(--text);
+        }
+        .page-shell { max-width: 1180px; margin: 0 auto; padding: 28px 24px 40px; }
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr);
+            gap: 24px;
+            align-items: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            border-radius: 28px;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        .eyebrow { display: inline-flex; margin-bottom: 18px; padding: 8px 14px; border-radius: 999px; font-size: 0.85rem; letter-spacing: 0.08em; background: rgba(255, 255, 255, 0.12); text-transform: uppercase; }
+        .hero h1 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.02; max-width: 11ch; margin-bottom: 20px; }
+        .hero p { max-width: 42rem; line-height: 1.7; opacity: 0.95; }
+        .hero-actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 14px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 22px; border-radius: 999px; border: none; font-weight: 700; text-decoration: none; cursor: pointer; }
+        .btn-primary { background: white; color: #3730a3; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.16); color: white; border: 1px solid rgba(255, 255, 255, 0.24); }
+        .hero-visual { display: grid; gap: 18px; }
+        .hero-visual .stats-card, .hero-visual .progress-card, .hero-visual .recommendation-card { padding: 20px; border-radius: 24px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(14px); }
+        .hero-visual p { margin: 0 0 8px; opacity: 0.85; }
+        .hero-visual strong { display: block; font-size: 1.4rem; }
+        .meter { position: relative; height: 10px; background: rgba(255, 255, 255, 0.16); border-radius: 999px; overflow: hidden; margin-top: 10px; }
+        .meter span { display: block; height: 100%; background: linear-gradient(90deg, #a78bfa, #818cf8); }
+        .section { margin-top: 32px; }
+        .section-heading { margin-bottom: 20px; }
+        .section-heading h2 { margin: 0 0 10px; font-size: 1.8rem; }
+        .section-heading p { margin: 0; color: var(--muted); }
+        .cards-grid, .dashboard-grid, .options-grid { display: grid; gap: 18px; }
+        .cards-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+        .lesson-card, .dashboard-card, .quiz-card { padding: 22px; border-radius: 28px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06); }
+        .lesson-card h3, .dashboard-card h3 { margin: 0 0 12px; font-size: 1.15rem; }
+        .lesson-card p, .dashboard-card p { margin: 0; color: var(--muted); line-height: 1.7; }
+        .lesson-card button { margin-top: 18px; width: 100%; }
+        .dashboard { display: grid; gap: 20px; grid-template-columns: 1.2fr 0.8fr; }
+        .dashboard-panel { display: flex; flex-direction: column; gap: 18px; }
+        .dashboard-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .dashboard-card { text-align: center; }
+        .dashboard-card p { font-size: 2rem; font-weight: 800; color: #111827; }
+        .planner-panel { min-height: 360px; }
+        .planner-form { display: grid; gap: 14px; }
+        .planner-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+        .planner-form input { width: 100%; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); font-size: 1rem; }
+        .task-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+        .task-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 16px; background: #f8fafc; border: 1px solid #e5e7eb; }
+        .task-item button { border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 0.9rem; }
+        .quiz-section { display: grid; gap: 20px; }
+        .quiz-card { display: grid; gap: 18px; }
+        .question-label { margin: 0 0 14px; color: var(--secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        #questionText { margin: 0 0 20px; font-size: 1.3rem; }
+        .options-grid { grid-template-columns: 1fr 1fr; }
+        .option-button { padding: 16px; border-radius: 18px; border: 1px solid var(--border); background: #ffffff; cursor: pointer; text-align: left; transition: transform 0.2s, border-color 0.2s, background-color 0.2s; }
+        .option-button:hover { transform: translateY(-2px); border-color: #c7d2fe; }
+        .option-button.selected { border-color: #4f46e5; background: #eef2ff; }
+        .quiz-actions { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; align-items: center; }
+        .feedback { color: var(--muted); min-height: 1.5rem; }
+        .notes-section textarea { width: 100%; min-height: 180px; border-radius: 24px; border: 1px solid var(--border); padding: 18px; resize: vertical; font-size: 1rem; line-height: 1.6; }
+        @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .dashboard { grid-template-columns: 1fr; } .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .page-shell { padding: 20px 16px 32px; } .options-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Smart Education</span>
+                <h1>Learn faster with a personalized study assistant</h1>
+                <p>Track progress, take interactive quizzes, and receive topic recommendations tailored to your performance.</p>
+                <div class="hero-actions">
+                    <a href="#lessons" class="btn btn-primary">Start learning</a>
+                    <a href="#quiz" class="btn btn-secondary">Take a quiz</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="stats-card">
+                    <p>Current streak</p>
+                    <strong id="streakValue">0 days</strong>
+                </div>
+                <div class="progress-card">
+                    <p>Learning progress</p>
+                    <div class="meter"><span id="progressMeter" style="width:0%"></span></div>
+                    <strong id="progressValue">0%</strong>
+                </div>
+                <div class="recommendation-card">
+                    <p>Next recommended topic</p>
+                    <strong id="recommendationText">Review basic math</strong>
+                </div>
+            </div>
+        </header>
+        <main>
+            <section id="lessons" class="section">
+                <div class="section-heading">
+                    <h2>Adaptive lessons</h2>
+                    <p>Choose a topic and unlock quick lesson cards with key ideas.</p>
+                </div>
+                <div class="cards-grid" id="lessonCards"></div>
+            </section>
+            <section class="section dashboard">
+                <div class="dashboard-panel">
+                    <h2>Your study dashboard</h2>
+                    <div class="dashboard-grid">
+                        <article class="dashboard-card">
+                            <h3>Completed lessons</h3>
+                            <p id="lessonCount">0</p>
+                        </article>
+                        <article class="dashboard-card">
+                            <h3>Quiz score</h3>
+                            <p id="quizScore">0 / 0</p>
+                        </article>
+                        <article class="dashboard-card">
+                            <h3>Tasks planned</h3>
+                            <p id="taskCount">0</p>
+                        </article>
+                    </div>
+                </div>
+                <div class="dashboard-panel planner-panel">
+                    <h2>Study planner</h2>
+                    <form id="plannerForm" class="planner-form">
+                        <label for="taskInput">Add a study task</label>
+                        <div class="planner-row">
+                            <input type="text" id="taskInput" placeholder="Write a quick goal" required>
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </div>
+                    </form>
+                    <ul id="taskList" class="task-list"></ul>
+                </div>
+            </section>
+            <section id="quiz" class="section quiz-section">
+                <div class="section-heading">
+                    <h2>Interactive quiz</h2>
+                    <p>Test your knowledge and get instant feedback.</p>
+                </div>
+                <div class="quiz-card">
+                    <div id="questionContainer">
+                        <p class="question-label">Question 1 of 5</p>
+                        <h3 id="questionText">Loading question...</h3>
+                        <div id="answerOptions" class="options-grid"></div>
+                    </div>
+                    <div class="quiz-actions">
+                        <button id="nextButton" class="btn btn-secondary">Submit answer</button>
+                        <div id="quizFeedback" class="feedback"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="section notes-section">
+                <div class="section-heading">
+                    <h2>Quick revision notes</h2>
+                    <p>Use this notes area to capture important ideas while you learn.</p>
+                </div>
+                <textarea id="notesInput" placeholder="Type your notes here..."></textarea>
+            </section>
+        </main>
+    </div>
+    <script>
+        const lessonCards = document.getElementById('lessonCards');
+        const streakValue = document.getElementById('streakValue');
+        const progressMeter = document.getElementById('progressMeter');
+        const progressValue = document.getElementById('progressValue');
+        const recommendationText = document.getElementById('recommendationText');
+        const lessonCount = document.getElementById('lessonCount');
+        const quizScore = document.getElementById('quizScore');
+        const taskCount = document.getElementById('taskCount');
+        const plannerForm = document.getElementById('plannerForm');
+        const taskInput = document.getElementById('taskInput');
+        const taskList = document.getElementById('taskList');
+        const questionText = document.getElementById('questionText');
+        const answerOptions = document.getElementById('answerOptions');
+        const questionLabel = document.querySelector('.question-label');
+        const nextButton = document.getElementById('nextButton');
+        const quizFeedback = document.getElementById('quizFeedback');
+        const lessons = [
+            { title: 'Basic math review', description: 'Refresh numbers, addition, subtraction, and quick problem solving.' },
+            { title: 'Reading comprehension', description: 'Practice identifying main ideas and reading faster with focus.' },
+            { title: 'Science facts', description: 'Explore simple science concepts and how to connect them to daily life.' },
+            { title: 'Memory techniques', description: 'Learn easy study methods that help you remember information.' },
+        ];
+        const quizQuestions = [
+            { question: 'What is 8 x 7?', options: ['54', '56', '58', '60'], answer: 1 },
+            { question: 'Which sentence is correct?', options: ['He go to school.', 'She is reading a book.', 'They was happy.', 'It are raining.'], answer: 1 },
+            { question: 'What is the boiling point of water?', options: ['50 C', '75 C', '100 C', '120 C'], answer: 2 },
+            { question: 'Which technique helps remember a list?', options: ['Cramming', 'Repetition', 'Guessing', 'Skipping'], answer: 1 },
+            { question: 'Which is a study habit?', options: ['Studying in short sessions', 'Watching TV while reading', 'Ignoring notes', 'Waiting until the last minute'], answer: 0 },
+        ];
+        let completedLessons = 0;
+        let currentQuizIndex = 0;
+        let selectedOption = null;
+        let correctAnswers = 0;
+        let tasks = [];
+        function initLessons() {
+            lessonCards.innerHTML = lessons.map((lesson, index) => {
+                return `<article class="lesson-card"><h3>${lesson.title}</h3><p>${lesson.description}</p><button class="btn btn-secondary" type="button" data-index="${index}">Mark complete</button></article>`;
+            }).join('');
+        }
+        function updateDashboard() {
+            lessonCount.textContent = completedLessons;
+            quizScore.textContent = `${correctAnswers} / ${quizQuestions.length}`;
+            taskCount.textContent = tasks.length;
+            const progress = Math.round((completedLessons / lessons.length) * 100);
+            progressMeter.style.width = `${progress}%`;
+            progressValue.textContent = `${progress}%`;
+            streakValue.textContent = `${Math.min(7, completedLessons + 1)} days`;
+            recommendationText.textContent = completedLessons >= 3 ? 'Try a new science challenge!' : 'Review basic math and reading topics.';
+        }
+        function renderTasks() {
+            taskList.innerHTML = tasks.map((task, index) => {
+                return `<li class="task-item"><span>${task}</span><button type="button" data-index="${index}">Done</button></li>`;
+            }).join('');
+            taskCount.textContent = tasks.length;
+        }
+        function setQuizQuestion() {
+            const current = quizQuestions[currentQuizIndex];
+            questionText.textContent = current.question;
+            questionLabel.textContent = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+            answerOptions.innerHTML = current.options.map((option, index) => `<button class="option-button" type="button" data-index="${index}">${option}</button>`).join('');
+            selectedOption = null;
+            quizFeedback.textContent = '';
+            nextButton.textContent = 'Submit answer';
+            nextButton.dataset.step = 'select';
+        }
+        function handleOptionClick(event) {
+            if (!event.target.matches('.option-button')) return;
+            answerOptions.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            selectedOption = Number(event.target.dataset.index);
+        }
+        function handleQuizSubmit() {
+            if (selectedOption === null) {
+                quizFeedback.textContent = 'Please select an answer first.';
+                quizFeedback.style.color = '#6b7280';
+                return;
+            }
+            const current = quizQuestions[currentQuizIndex];
+            const isCorrect = selectedOption === current.answer;
+            if (isCorrect) {
+                correctAnswers += 1;
+                quizFeedback.textContent = 'Nice work! That answer is correct.';
+                quizFeedback.style.color = '#16a34a';
+            } else {
+                quizFeedback.textContent = `Not quite. The correct answer is "${current.options[current.answer]}".`;
+                quizFeedback.style.color = '#dc2626';
+            }
+            nextButton.textContent = currentQuizIndex < quizQuestions.length - 1 ? 'Next question' : 'Finish quiz';
+            nextButton.dataset.step = 'review';
+        }
+        function nextQuizStep() {
+            if (nextButton.dataset.step === 'review') {
+                currentQuizIndex += 1;
+                if (currentQuizIndex < quizQuestions.length) {
+                    setQuizQuestion();
+                } else {
+                    questionText.textContent = 'Quiz complete!';
+                    questionLabel.textContent = '';
+                    answerOptions.innerHTML = '';
+                    quizFeedback.textContent = `You scored ${correctAnswers} out of ${quizQuestions.length}. Keep practicing!`;
+                    quizFeedback.style.color = '#2563eb';
+                    nextButton.textContent = 'Restart quiz';
+                    nextButton.dataset.step = 'restart';
+                    updateDashboard();
+                }
+            } else if (nextButton.dataset.step === 'restart') {
+                currentQuizIndex = 0;
+                correctAnswers = 0;
+                setQuizQuestion();
+                updateDashboard();
+            } else {
+                handleQuizSubmit();
+            }
+        }
+        lessonCards.addEventListener('click', event => {
+            if (!event.target.matches('button')) return;
+            completedLessons += 1;
+            updateDashboard();
+            event.target.textContent = 'Completed';
+            event.target.disabled = true;
+        });
+        plannerForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const value = taskInput.value.trim();
+            if (!value) return;
+            tasks.push(value);
+            taskInput.value = '';
+            renderTasks();
+        });
+        taskList.addEventListener('click', event => {
+            if (!event.target.matches('button')) return;
+            const index = Number(event.target.dataset.index);
+            tasks.splice(index, 1);
+            renderTasks();
+        });
+        answerOptions.addEventListener('click', handleOptionClick);
+        nextButton.addEventListener('click', nextQuizStep);
+        initLessons();
+        setQuizQuestion();
+        updateDashboard();
+        renderTasks();
+    </script>
+</body>
+</html>

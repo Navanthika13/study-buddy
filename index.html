@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Education Hub</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Smart Education</span>
+                <h1>Learn faster with a personalized study assistant</h1>
+                <p>Track progress, take interactive quizzes, and receive topic recommendations tailored to your performance.</p>
+                <div class="hero-actions">
+                    <a href="#lessons" class="btn btn-primary">Start learning</a>
+                    <a href="#quiz" class="btn btn-secondary">Take a quiz</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="stats-card">
+                    <p>Current streak</p>
+                    <strong id="streakValue">0 days</strong>
+                </div>
+                <div class="progress-card">
+                    <p>Learning progress</p>
+                    <div class="meter"><span id="progressMeter" style="width:0%"></span></div>
+                    <strong id="progressValue">0%</strong>
+                </div>
+                <div class="recommendation-card">
+                    <p>Next recommended topic</p>
+                    <strong id="recommendationText">Review basic math</strong>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section id="lessons" class="section">
+                <div class="section-heading">
+                    <h2>Adaptive lessons</h2>
+                    <p>Choose a topic and unlock quick lesson cards with key ideas.</p>
+                </div>
+                <div class="cards-grid" id="lessonCards"></div>
+            </section>
+
+            <section class="section dashboard">
+                <div class="dashboard-panel">
+                    <h2>Your study dashboard</h2>
+                    <div class="dashboard-grid">
+                        <article class="dashboard-card">
+                            <h3>Completed lessons</h3>
+                            <p id="lessonCount">0</p>
+                        </article>
+                        <article class="dashboard-card">
+                            <h3>Quiz score</h3>
+                            <p id="quizScore">0 / 0</p>
+                        </article>
+                        <article class="dashboard-card">
+                            <h3>Tasks planned</h3>
+                            <p id="taskCount">0</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="dashboard-panel planner-panel">
+                    <h2>Study planner</h2>
+                    <form id="plannerForm" class="planner-form">
+                        <label for="taskInput">Add a study task</label>
+                        <div class="planner-row">
+                            <input type="text" id="taskInput" placeholder="Write a quick goal" required>
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </div>
+                    </form>
+                    <ul id="taskList" class="task-list"></ul>
+                </div>
+            </section>
+
+            <section id="quiz" class="section quiz-section">
+                <div class="section-heading">
+                    <h2>Interactive quiz</h2>
+                    <p>Test your knowledge and get instant feedback.</p>
+                </div>
+                <div class="quiz-card">
+                    <div id="questionContainer">
+                        <p class="question-label">Question 1 of 5</p>
+                        <h3 id="questionText">Loading question...</h3>
+                        <div id="answerOptions" class="options-grid"></div>
+                    </div>
+                    <div class="quiz-actions">
+                        <button id="nextButton" class="btn btn-secondary">Submit answer</button>
+                        <div id="quizFeedback" class="feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section notes-section">
+                <div class="section-heading">
+                    <h2>Quick revision notes</h2>
+                    <p>Use this notes area to capture important ideas while you learn.</p>
+                </div>
+                <textarea id="notesInput" placeholder="Type your notes here..."></textarea>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
